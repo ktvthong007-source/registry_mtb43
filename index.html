@@ -1,104 +1,219 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 <title>Dashboard Google Form Realtime</title>
 
 <style>
+
+:root{
+  --green:#2d5a27;
+  --green-dark:#23471f;
+  --bg:#f4f7f3;
+  --card:#ffffff;
+  --text:#222;
+  --muted:#777;
+  --border:#e5e5e5;
+}
+
+*{
+  box-sizing:border-box;
+}
+
 body{
-  font-family:sans-serif;
-  background:#f5f5f5;
   margin:0;
-  padding:30px;
+  padding:24px;
+  font-family:
+    "Noto Sans Thai",
+    sans-serif;
+  background:var(--bg);
+  color:var(--text);
 }
 
 .container{
-  max-width:1200px;
+  max-width:1280px;
   margin:auto;
 }
 
 .card{
-  background:#fff;
-  border-radius:16px;
+  background:var(--card);
+  border-radius:18px;
   padding:24px;
-  margin-bottom:20px;
-  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  margin-bottom:24px;
+  box-shadow:0 4px 14px rgba(0,0,0,.06);
 }
 
-h1{
+h1,h2{
   margin-top:0;
+}
+
+.subtitle{
+  color:var(--muted);
+  margin-bottom:20px;
 }
 
 .stats{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:16px;
+  gap:18px;
 }
 
 .stat{
-  background:#2d5a27;
+  background:linear-gradient(
+    135deg,
+    var(--green),
+    var(--green-dark)
+  );
+
   color:#fff;
-  border-radius:14px;
-  padding:20px;
+  border-radius:16px;
+  padding:22px;
   text-align:center;
+  transition:.25s;
+}
+
+.stat:hover{
+  transform:translateY(-3px);
 }
 
 .stat h2{
   margin:0;
-  font-size:40px;
+  font-size:42px;
 }
 
 .stat p{
-  margin:6px 0 0;
+  margin-top:8px;
+  opacity:.92;
+}
+
+.table-wrapper{
+  overflow-x:auto;
 }
 
 table{
   width:100%;
   border-collapse:collapse;
+  min-width:700px;
+}
+
+thead{
+  background:#f1f1f1;
 }
 
 th,td{
-  padding:12px;
-  border-bottom:1px solid #ddd;
+  padding:14px;
+  border-bottom:1px solid var(--border);
   text-align:left;
+  font-size:15px;
+}
+
+tbody tr:hover{
+  background:#fafafa;
 }
 
 .loading{
   text-align:center;
   padding:30px;
+  color:var(--muted);
+}
+
+.error{
+  color:red;
+  text-align:center;
+  padding:24px;
 }
 
 iframe{
   width:100%;
   height:900px;
   border:none;
-  border-radius:12px;
+  border-radius:14px;
+  background:#fff;
 }
 
-@media(max-width:768px){
+.footer{
+  text-align:center;
+  color:var(--muted);
+  margin-top:12px;
+  font-size:14px;
+}
+
+.refresh{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.badge{
+  display:inline-block;
+  background:#e8f3e6;
+  color:var(--green);
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:14px;
+  margin-bottom:12px;
+}
+
+@media(max-width:992px){
+
   .stats{
     grid-template-columns:1fr 1fr;
   }
+
 }
+
+@media(max-width:600px){
+
+  body{
+    padding:14px;
+  }
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  iframe{
+    height:700px;
+  }
+
+}
+
 </style>
 </head>
+
 <body>
 
 <div class="container">
 
+  <!-- FORM -->
   <div class="card">
+
+    <div class="badge">
+      ระบบลงทะเบียนออนไลน์
+    </div>
+
     <h1>ลงทะเบียนเข้าเยี่ยมชมศูนย์เกษตรฯ</h1>
 
-    <!-- GOOGLE FORM -->
-    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf2Gi3EtGqlX9nze8uXcdh9vei-WwsAg_JT7a0xtgzV9uGC8Q/viewform?embedded=true">
+    <p class="subtitle">
+      กรุณากรอกข้อมูลผ่าน Google Form ด้านล่าง
+    </p>
+
+    <iframe
+      loading="lazy"
+      src="https://docs.google.com/forms/d/e/1FAIpQLSf2Gi3EtGqlX9nze8uXcdh9vei-WwsAg_JT7a0xtgzV9uGC8Q/viewform?embedded=true">
     </iframe>
+
   </div>
 
+  <!-- STATS -->
   <div class="card">
+
     <h2>สถิติแบบ Real-time</h2>
 
     <div class="stats">
+
       <div class="stat">
         <h2 id="total">0</h2>
         <p>ผู้ลงทะเบียนทั้งหมด</p>
@@ -118,27 +233,47 @@ iframe{
         <h2 id="provinces">0</h2>
         <p>จังหวัด</p>
       </div>
+
     </div>
+
+    <div class="refresh" id="refreshTime">
+      อัปเดตล่าสุด: -
+    </div>
+
   </div>
 
+  <!-- TABLE -->
   <div class="card">
+
     <h2>ผู้ลงทะเบียนล่าสุด</h2>
 
     <div id="loading" class="loading">
       กำลังโหลดข้อมูล...
     </div>
 
-    <table id="table" style="display:none;">
-      <thead>
-        <tr>
-          <th>เวลา</th>
-          <th>ชื่อ</th>
-          <th>หน่วยงาน</th>
-          <th>จังหวัด</th>
-        </tr>
-      </thead>
-      <tbody id="tbody"></tbody>
-    </table>
+    <div class="table-wrapper">
+
+      <table id="table" style="display:none;">
+
+        <thead>
+          <tr>
+            <th>เวลา</th>
+            <th>ชื่อ</th>
+            <th>หน่วยงาน</th>
+            <th>จังหวัด</th>
+          </tr>
+        </thead>
+
+        <tbody id="tbody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+  <div class="footer">
+    Dashboard Realtime เชื่อมต่อ Google Sheets CSV
   </div>
 
 </div>
@@ -147,14 +282,14 @@ iframe{
 
 /*
 =====================================================
-วิธีใช้งาน
+การตั้งค่า Google Sheets
 
 1. เปิด Google Form
-2. กด Responses
-3. กด Link ไป Spreadsheet
-4. เปิด Spreadsheet
+2. Responses
+3. Link to Sheets
+4. เปิด Google Sheets
 5. File > Share > Publish to web
-6. Publish Sheet1 เป็น CSV
+6. Publish เป็น CSV
 
 นำ URL CSV มาใส่ด้านล่าง
 =====================================================
@@ -164,51 +299,100 @@ const SHEET_CSV_URL =
 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT5yc3WgZx3XEP3toJ3B2twi9EtOP7nOegO_tEmto9iMBkGpuhV5wAbhYxPq6RhOn2nV0VyyGqtOrvz/pub?output=csv';
 
 
+// โหลดข้อมูล
 async function loadData(){
 
   try{
 
-    const res = await fetch(SHEET_CSV_URL);
+    showLoading(true);
 
-    const csv = await res.text();
+    const response = await fetch(
+      SHEET_CSV_URL,
+      {
+        cache:"no-store"
+      }
+    );
+
+    if(!response.ok){
+      throw new Error(
+        'ไม่สามารถเชื่อมต่อ Google Sheets ได้'
+      );
+    }
+
+    const csv = await response.text();
 
     const rows = parseCSV(csv);
 
     render(rows);
 
-  }catch(err){
+    updateRefreshTime();
 
-    document.getElementById('loading').innerHTML =
-      'โหลดข้อมูลไม่สำเร็จ<br><br>' + err.message;
+  }catch(error){
 
-    console.error(err);
+    showError(error.message);
+
+    console.error(error);
 
   }
 
 }
 
 
+// แสดง loading
+function showLoading(show){
+
+  const loading =
+    document.getElementById('loading');
+
+  loading.style.display =
+    show ? 'block' : 'none';
+
+}
+
+
+// แสดง error
+function showError(message){
+
+  const loading =
+    document.getElementById('loading');
+
+  loading.className = 'error';
+
+  loading.innerHTML = `
+    โหลดข้อมูลไม่สำเร็จ
+    <br><br>
+    ${message}
+  `;
+
+}
+
+
+// Parse CSV
 function parseCSV(text){
 
-  const lines = text.split('\n');
+  const lines = text
+    .replace(/\r/g,'')
+    .split('\n');
 
   const data = [];
 
+  // ข้าม header row
   for(let i=1;i<lines.length;i++){
 
     const row = lines[i].trim();
 
     if(!row) continue;
 
-    const cols = splitCSV(row);
+    data.push(splitCSV(row));
 
-    data.push(cols);
   }
 
   return data;
+
 }
 
 
+// แยก CSV รองรับ comma ในข้อความ
 function splitCSV(row){
 
   const result = [];
@@ -221,103 +405,172 @@ function splitCSV(row){
 
     const char = row[i];
 
+    // quote
     if(char === '"'){
 
-      inQuotes = !inQuotes;
+      // รองรับ ""
+      if(
+        inQuotes &&
+        row[i+1] === '"'
+      ){
+        current += '"';
+        i++;
+      }else{
+        inQuotes = !inQuotes;
+      }
 
-    }else if(char === ',' && !inQuotes){
+    }
 
-      result.push(current);
+    // comma
+    else if(
+      char === ',' &&
+      !inQuotes
+    ){
+
+      result.push(current.trim());
 
       current = '';
 
-    }else{
+    }
+
+    else{
 
       current += char;
+
     }
+
   }
 
-  result.push(current);
+  result.push(current.trim());
 
   return result;
+
 }
 
 
+// render dashboard
 function render(rows){
 
-  document.getElementById('loading').style.display='none';
+  showLoading(false);
 
-  document.getElementById('table').style.display='table';
+  const table =
+    document.getElementById('table');
 
-  // ===== สถิติ =====
+  table.style.display = 'table';
 
-  document.getElementById('total').innerText =
-    rows.length;
+  // =====================
+  // สถิติ
+  // =====================
+
+  document.getElementById('total')
+    .textContent = rows.length;
 
   // วันนี้
   const today = new Date();
 
-  const todayCount = rows.filter(r=>{
+  const todayCount =
+    rows.filter(r=>{
 
-    const d = new Date(r[0]);
+      const date = new Date(r[0]);
 
-    return d.toDateString() === today.toDateString();
+      if(isNaN(date)) return false;
 
-  }).length;
+      return (
+        date.toDateString() ===
+        today.toDateString()
+      );
 
-  document.getElementById('today').innerText =
-    todayCount;
+    }).length;
 
-  // ประเภทหน่วยงาน
+  document.getElementById('today')
+    .textContent = todayCount;
+
+  // หน่วยงาน
   const groups = new Set();
-
-  rows.forEach(r=>{
-
-    if(r[3]) groups.add(r[3]);
-
-  });
-
-  document.getElementById('groups').innerText =
-    groups.size;
 
   // จังหวัด
   const provinces = new Set();
 
   rows.forEach(r=>{
 
-    if(r[4]) provinces.add(r[4]);
+    if(r[3]){
+      groups.add(r[3]);
+    }
+
+    if(r[4]){
+      provinces.add(r[4]);
+    }
 
   });
 
-  document.getElementById('provinces').innerText =
-    provinces.size;
+  document.getElementById('groups')
+    .textContent = groups.size;
 
-  // ===== ตารางล่าสุด =====
+  document.getElementById('provinces')
+    .textContent = provinces.size;
 
-  const tbody = document.getElementById('tbody');
+
+  // =====================
+  // ตาราง
+  // =====================
+
+  const tbody =
+    document.getElementById('tbody');
 
   tbody.innerHTML = '';
 
-  rows.reverse().slice(0,10).forEach(r=>{
+  rows
+    .slice()
+    .reverse()
+    .slice(0,10)
+    .forEach(r=>{
 
-    const tr = document.createElement('tr');
+      const tr =
+        document.createElement('tr');
 
-    tr.innerHTML = `
-      <td>${r[0] || '-'}</td>
-      <td>${r[2] || '-'}</td>
-      <td>${r[3] || '-'}</td>
-      <td>${r[4] || '-'}</td>
-    `;
+      tr.innerHTML = `
+        <td>${escapeHTML(r[0] || '-')}</td>
+        <td>${escapeHTML(r[2] || '-')}</td>
+        <td>${escapeHTML(r[3] || '-')}</td>
+        <td>${escapeHTML(r[4] || '-')}</td>
+      `;
 
-    tbody.appendChild(tr);
+      tbody.appendChild(tr);
 
-  });
+    });
+
+}
+
+
+// ป้องกัน XSS
+function escapeHTML(str){
+
+  return str
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+
+}
+
+
+// เวลา refresh ล่าสุด
+function updateRefreshTime(){
+
+  const now = new Date();
+
+  document.getElementById('refreshTime')
+    .textContent =
+      'อัปเดตล่าสุด: ' +
+      now.toLocaleString('th-TH');
 
 }
 
 
 // โหลดครั้งแรก
 loadData();
+
 
 // รีเฟรชทุก 60 วินาที
 setInterval(loadData,60000);
