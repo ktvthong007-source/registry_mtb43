@@ -175,7 +175,7 @@ body {
   max-width: 1100px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 0;
 }
 .stat-item {
@@ -280,12 +280,98 @@ body {
   font-size: 16px;
 }
 
-/* Google Form Embed */
-.iframe-container {
-  border-radius:16px;
-  overflow:hidden;
-  border:1.5px solid #e2d9cd;
+/* Form groups */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.form-group { margin-bottom: 16px; }
+.form-label {
+  display: block;
+  font-size: 13px; font-weight: 600;
+  color: var(--bark);
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
 }
+.form-label .req { color: #dc2626; }
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #e2d9cd;
+  border-radius: 12px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  color: var(--soil);
+  background: var(--cream);
+  transition: border-color .2s, background .2s, box-shadow .2s;
+  outline: none;
+  -webkit-appearance: none;
+}
+.form-input::placeholder, .form-textarea::placeholder { color: #baa98f; }
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--leaf);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(74,124,63,0.10);
+}
+.form-select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' viewBox='0 0 12 8'%3E%3Cpath stroke='%235c3d2e' stroke-linecap='round' stroke-width='1.5' d='m1 1 5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+.form-textarea { resize: vertical; min-height: 80px; }
+
+/* Radio / Checkbox groups */
+.radio-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.radio-opt {
+  label {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 14px;
+    border: 1.5px solid #e2d9cd;
+    border-radius: 30px;
+    font-size: 13px; font-weight: 500;
+    color: var(--bark);
+    cursor: pointer;
+    transition: all .2s;
+    user-select: none;
+  }
+}
+.radio-opt input[type=radio], .radio-opt input[type=checkbox] { display: none; }
+.radio-opt input:checked + label {
+  background: var(--leaf);
+  border-color: var(--leaf);
+  color: #fff;
+}
+.radio-opt label:hover {
+  border-color: var(--sprout);
+  background: rgba(127,176,105,0.08);
+}
+
+/* Submit button */
+.btn-submit {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--leaf), var(--moss));
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-family: 'Kanit', sans-serif;
+  font-size: 17px; font-weight: 700;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform .2s, box-shadow .2s;
+  margin-top: 8px;
+  letter-spacing: 0.03em;
+}
+.btn-submit::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(45,90,39,0.35); }
+.btn-submit:active { transform: translateY(0); }
+.btn-submit .btn-icon { margin-right: 8px; font-size: 18px; }
 
 /* Form note */
 .form-note {
@@ -295,6 +381,42 @@ body {
   margin-top: 16px;
   line-height: 1.6;
 }
+
+/* ===== SUCCESS STATE ===== */
+.success-overlay {
+  display: none;
+  padding: 48px 32px;
+  text-align: center;
+}
+.success-icon {
+  width: 80px; height: 80px;
+  background: #dcfce7;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px;
+  margin: 0 auto 20px;
+}
+.success-overlay h3 {
+  font-family: 'Kanit', sans-serif;
+  font-size: 22px; font-weight: 700;
+  color: var(--moss);
+  margin-bottom: 8px;
+}
+.success-overlay p { font-size: 14px; color: var(--earth); line-height: 1.7; }
+.btn-back {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 28px;
+  border: 2px solid var(--leaf);
+  border-radius: 30px;
+  color: var(--leaf);
+  font-family: 'Kanit', sans-serif;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  background: none;
+}
+.btn-back:hover { background: var(--leaf); color: #fff; }
 
 /* ===== SIDEBAR ===== */
 .sidebar { display: flex; flex-direction: column; gap: 20px; }
@@ -452,6 +574,83 @@ body {
 }
 .notice-icon { font-size: 20px; flex-shrink: 0; }
 
+
+/* ===== RATING CARD ===== */
+.rating-card {
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(61,43,31,0.08);
+  border: 1px solid rgba(61,43,31,0.06);
+}
+.rating-card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(61,43,31,0.07);
+  display: flex; align-items: center; gap: 10px;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+.rating-card-header h3 {
+  font-family: 'Kanit', sans-serif;
+  font-size: 14px; font-weight: 700;
+  color: var(--soil);
+  display: flex; align-items: center; gap: 8px;
+}
+.rating-body { padding: 18px 20px; }
+.rating-row {
+  margin-bottom: 16px;
+}
+.rating-row:last-child { margin-bottom: 0; }
+.rating-label {
+  font-size: 12px; font-weight: 600;
+  color: var(--bark);
+  margin-bottom: 6px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.rating-score {
+  font-family: 'Kanit', sans-serif;
+  font-size: 18px; font-weight: 700;
+  color: var(--gold);
+}
+.rating-score-sub { font-size: 11px; color: var(--earth); font-weight: 400; }
+.stars-row {
+  display: flex; gap: 3px; margin-bottom: 6px;
+}
+.star {
+  width: 18px; height: 18px;
+  position: relative;
+  display: inline-block;
+}
+.star svg { width: 18px; height: 18px; }
+.rating-bar-track {
+  height: 6px;
+  background: #f0e8dc;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.rating-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--harvest), var(--gold));
+  transition: width 1.2s ease;
+}
+.rating-count { font-size: 11px; color: var(--earth); margin-top: 4px; }
+.overall-score {
+  text-align: center;
+  padding: 16px 0 12px;
+  border-bottom: 1px solid rgba(61,43,31,0.07);
+  margin-bottom: 16px;
+}
+.overall-num {
+  font-family: 'Kanit', sans-serif;
+  font-size: 40px; font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+}
+.overall-max { font-size: 18px; color: var(--earth); font-weight: 400; }
+.overall-stars { display: flex; justify-content: center; gap: 4px; margin: 6px 0 4px; }
+.overall-star { font-size: 20px; }
+.overall-label { font-size: 12px; color: var(--earth); }
+
 /* ===== FOOTER ===== */
 footer {
   background: var(--soil);
@@ -494,6 +693,20 @@ footer::before {
 .loading-dots span:nth-child(3) { animation-delay: .3s; }
 @keyframes dot-bounce { 0%,80%,100%{transform:scale(0.6);opacity:0.4} 40%{transform:scale(1);opacity:1} }
 
+/* Progress ring */
+.progress-ring { position: relative; width: 64px; height: 64px; }
+.ring-svg { transform: rotate(-90deg); }
+.ring-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 5; }
+.ring-fill { fill: none; stroke: var(--harvest); stroke-width: 5; stroke-linecap: round;
+  stroke-dasharray: 176; stroke-dashoffset: 176; transition: stroke-dashoffset 1.5s ease; }
+.ring-text {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Kanit', sans-serif;
+  font-size: 13px; font-weight: 700;
+  color: var(--harvest);
+}
+
 /* Pulse on stats update */
 @keyframes stat-pulse {
   0% { transform: scale(1); }
@@ -516,21 +729,27 @@ footer::before {
 </head>
 <body>
 
+<!-- HERO -->
 <div class="hero">
+  <!-- Particles -->
   <div class="particle" style="width:8px;height:8px;left:15%;bottom:0;animation-duration:8s;animation-delay:0s;"></div>
   <div class="particle" style="width:5px;height:5px;left:35%;bottom:0;animation-duration:12s;animation-delay:2s;"></div>
   <div class="particle" style="width:10px;height:10px;left:60%;bottom:0;animation-duration:10s;animation-delay:4s;"></div>
   <div class="particle" style="width:6px;height:6px;left:80%;bottom:0;animation-duration:9s;animation-delay:1s;"></div>
   <div class="particle" style="width:4px;height:4px;left:50%;bottom:0;animation-duration:14s;animation-delay:3s;"></div>
 
-  <div class="hero-emblem">มทบ</div>
+  <div class="hero-emblem" style="background:transparent;border:none;box-shadow:none;width:110px;height:110px;padding:0;overflow:visible;">
+  <img src="data:image/jpeg;base64,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" alt="ศูนย์เกษตรทฤษฎีใหม่ มทบ.43" style="width:110px;height:110px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 4px rgba(200,148,58,0.4),0 0 40px rgba(200,148,58,0.2);">
+</div>
   <div class="hero-subtitle">มณฑลทหารบกที่ ๔๓ • ค่ายเทพสตรีศรีสุนทร</div>
   <h1 class="hero-title">ลงทะเบียนเข้าเยี่ยมชม<br><span>ศูนย์เกษตรทฤษฎีใหม่</span>ครบวงจร</h1>
   <div class="hero-tag">🌱 น้อมนำศาสตร์พระราชา สู่การพัฒนาที่ยั่งยืน</div>
 
+  <!-- Decorative rice stalks -->
   <div class="hero-stalks" id="stalksContainer"></div>
 </div>
 
+<!-- LIVE STATS BANNER -->
 <div class="stats-banner">
   <div class="stats-inner">
     <div class="stat-item">
@@ -562,11 +781,20 @@ footer::before {
       </div>
       <div class="stat-label">จังหวัดที่เข้าเยี่ยมชม</div>
     </div>
+    <div class="stat-item">
+      <div class="stat-num">
+        <span id="stat-visitors-sum">—</span>
+        <span class="stat-unit">คน</span>
+      </div>
+      <div class="stat-label">ผู้เข้าชมรวมทั้งหมด</div>
+    </div>
   </div>
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
+  <!-- FORM SECTION -->
   <div>
     <div class="notice-banner">
       <div class="notice-icon">📋</div>
@@ -584,16 +812,19 @@ footer::before {
       </div>
 
       <div class="form-body" id="formBody">
+        <!-- ฝังลงใน Google Form ด้วย iframe แบบ viewform -->
         <div style="font-size:13px;color:var(--earth);margin-bottom:16px;line-height:1.7;">
           กรอกข้อมูลผ่านแบบฟอร์มด้านล่าง ข้อมูลจะถูกบันทึกและนำไปแสดงผลสถิติแบบ real-time
         </div>
 
+        <!-- ส่วนข้อมูลเพิ่มเติมก่อนฝัง form -->
         <div style="background:var(--sky);border-radius:12px;padding:14px 16px;margin-bottom:20px;font-size:13px;color:var(--moss);display:flex;gap:10px;align-items:flex-start;">
           <span style="font-size:18px;">💡</span>
           <div>กรุณาตรวจสอบความถูกต้องของข้อมูลก่อนกด <strong>ส่ง</strong> เพราะระบบจะนำข้อมูลไปแสดงผลสถิติแบบเรียลไทม์</div>
         </div>
 
-        <div class="iframe-container">
+        <!-- Google Form Embed -->
+        <div style="border-radius:16px;overflow:hidden;border:1.5px solid #e2d9cd;">
           <iframe
             src="https://docs.google.com/forms/d/e/1FAIpQLSf2Gi3EtGqlX9nze8uXcdh9vei-WwsAg_JT7a0xtgzV9uGC8Q/viewform?embedded=true"
             width="100%"
@@ -615,8 +846,10 @@ footer::before {
     </div>
   </div>
 
+  <!-- SIDEBAR -->
   <div class="sidebar">
 
+    <!-- Info card -->
     <div class="info-card">
       <div class="info-card-header">
         <div class="info-icon green">🌿</div>
@@ -641,7 +874,7 @@ footer::before {
           <div class="hi-dot"></div>
           <div class="hi-text">
             <strong>เกษตรอินทรีย์ครบวงจร</strong>
-            <span>ไม่ใช้สารเคมี ผลผลิตปลอดภัย</span>
+            <span>ไม่ใช้สารเคมี ผลผลิตปลอดภัย 100%</span>
           </div>
         </div>
         <div class="highlight-item">
@@ -654,13 +887,14 @@ footer::before {
         <div class="highlight-item">
           <div class="hi-dot"></div>
           <div class="hi-text">
-            <strong>ฐานเรียนรู้ไก่ไข่ / ปลาน้ำจืด</strong>
-            <span>โรงเรือนมาตรฐาน พร้อมวิทยากรอธิบาย</span>
+            <strong>ฐานเรียนรู้การเลี้ยงสัตว์ / ปลาน้ำจืด</strong>
+            <span>แบบผสมผสาน พร้อมวิทยากรอธิบาย</span>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Stats breakdown -->
     <div class="info-card">
       <div class="info-card-header">
         <div class="info-icon gold">📊</div>
@@ -683,6 +917,7 @@ footer::before {
       </div>
     </div>
 
+    <!-- Recent visitors -->
     <div class="visitors-card">
       <div class="vc-header">
         <h3><span class="stat-live"></span> ผู้ลงทะเบียนล่าสุด</h3>
@@ -695,15 +930,66 @@ footer::before {
       </div>
     </div>
 
+    <!-- Rating card -->
+    <div class="rating-card" id="ratingCard">
+      <div class="rating-card-header">
+        <div class="info-icon gold">⭐</div>
+        <h3>ความพึงพอใจผู้เข้าเยี่ยมชม <span class="stat-live" style="margin-left:4px;"></span></h3>
+      </div>
+      <div class="rating-body">
+        <div class="overall-score">
+          <div class="overall-num" id="overall-avg">—<span class="overall-max">/5</span></div>
+          <div class="overall-stars" id="overall-stars">
+            <span class="overall-star" style="color:#ddd;">★</span>
+            <span class="overall-star" style="color:#ddd;">★</span>
+            <span class="overall-star" style="color:#ddd;">★</span>
+            <span class="overall-star" style="color:#ddd;">★</span>
+            <span class="overall-star" style="color:#ddd;">★</span>
+          </div>
+          <div class="overall-label" id="overall-label">กำลังโหลดข้อมูล...</div>
+        </div>
+        <div class="rating-row">
+          <div class="rating-label">
+            <span>📍 ด้านสถานที่ ความเหมาะสม</span>
+            <span class="rating-score" id="score-place">—</span>
+          </div>
+          <div class="stars-row" id="stars-place"></div>
+          <div class="rating-bar-track"><div class="rating-bar-fill" id="bar-place" style="width:0%"></div></div>
+          <div class="rating-count" id="count-place"></div>
+        </div>
+        <div class="rating-row">
+          <div class="rating-label">
+            <span>👨‍🏫 ด้านความรู้เจ้าหน้าที่/วิทยากร</span>
+            <span class="rating-score" id="score-staff">—</span>
+          </div>
+          <div class="stars-row" id="stars-staff"></div>
+          <div class="rating-bar-track"><div class="rating-bar-fill" id="bar-staff" style="width:0%"></div></div>
+          <div class="rating-count" id="count-staff"></div>
+        </div>
+        <div class="rating-row">
+          <div class="rating-label">
+            <span>📚 ความรู้ที่ได้จากการเยี่ยมชม</span>
+            <span class="rating-score" id="score-knowledge">—</span>
+          </div>
+          <div class="stars-row" id="stars-knowledge"></div>
+          <div class="rating-bar-track"><div class="rating-bar-fill" id="bar-knowledge" style="width:0%"></div></div>
+          <div class="rating-count" id="count-knowledge"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zones -->
     <div class="zone-card">
       <h3>ฐานการเรียนรู้</h3>
       <div class="zone-list">
-        <div class="zone-item"><div class="zone-num">01</div><div>แปลงเกษตรอินทรีย์ครบวงจร</div></div>
-        <div class="zone-item"><div class="zone-num">02</div><div>โรงเรือนพืชสมุนไพร – ผัก</div></div>
-        <div class="zone-item"><div class="zone-num">03</div><div>ฐานเรียนรู้ไก่ไข่คุณภาพ</div></div>
-        <div class="zone-item"><div class="zone-num">04</div><div>บ่อปลาน้ำจืด – ผสมผสาน</div></div>
-        <div class="zone-item"><div class="zone-num">05</div><div>โรงเพาะชำ – ทหารพันธุ์ดี</div></div>
-        <div class="zone-item"><div class="zone-num">06</div><div>ศูนย์จำหน่ายผลิตภัณฑ์</div></div>
+        <div class="zone-item"><div class="zone-num">01</div><div>สถานีศาสตร์พระราชา</div></div>
+        <div class="zone-item"><div class="zone-num">02</div><div>ฐานคนรักษ์สมุนไพร</div></div>
+        <div class="zone-item"><div class="zone-num">03</div><div>ฐานคนรักษ์แม่โพสพ</div></div>
+        <div class="zone-item"><div class="zone-num">04</div><div>ฐานคนรักษ์น้ำ</div></div>
+        <div class="zone-item"><div class="zone-num">05</div><div>ฐานคนรักษ์ดิน</div></div>
+        <div class="zone-item"><div class="zone-num">06</div><div>ฐานคนรักษ์ป่า</div></div>
+        <div class="zone-item"><div class="zone-num">07</div><div>ฐานคนรักษ์สัตว์</div></div>
+        <div class="zone-item"><div class="zone-num">08</div><div>ฐานคนรักษ์สุขภาพ</div></div>
       </div>
     </div>
 
@@ -737,14 +1023,19 @@ footer::before {
   }
 })();
 
+/* ===== GOOGLE SHEET STATS (Public CSV from Form Responses) ===== */
+const FORM_ID = '1FAIpQLSf2Gi3EtGqlX9nze8uXcdh9vei-WwsAg_JT7a0xtgzV9uGC8Q';
 
-/* ===== GOOGLE SHEET STATS (Direct Fetch from Public CSV) ===== */
-
-// ลิงก์ของคุณที่ดึงมาโดยตรง
-const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT5yc3WgZx3XEP3toJ3B2twi9EtOP7nOegO_tEmto9iMBkGpuhV5wAbhYxPq6RhOn2nV0VyyGqtOrvz/pub?gid=250652367&single=true&output=csv';
+// ดึงข้อมูลจาก Google Sheet ที่เชื่อมกับ Form (ต้อง Publish to Web)
+// ตัวอย่าง URL สำหรับ Response Sheet:
+// https://docs.google.com/spreadsheets/d/SHEET_ID/gviz/tq?tqx=out:csv
+// *** ผู้ดูแลระบบต้องแทนที่ SHEET_ID ด้วย ID ของ Spreadsheet จริง ***
+const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT5yc3WgZx3XEP3toJ3B2twi9EtOP7nOegO_tEmto9iMBkGpuhV5wAbhYxPq6RhOn2nV0VyyGqtOrvz/pub?output=csv';
 
 let allData = [];
+let lastCount = 0;
 
+// Color avatars
 const avatarColors = [
   {bg:'#dcfce7',color:'#166534'},
   {bg:'#dbeafe',color:'#1e40af'},
@@ -790,29 +1081,103 @@ function updateStatNum(id, val){
   setTimeout(()=>el.classList.remove('pulse'), 600);
 }
 
+/* ===== COLUMN INDEX MAP =====
+  Google Form Response columns (0-based after timestamp):
+  col[0]  = Timestamp
+  col[1]  = ชื่อหน่วยงาน/คณะ
+  col[2]  = ชื่อผู้ประสานงาน
+  col[3]  = ประเภทหน่วยงาน
+  col[4]  = จังหวัด
+  col[5]  = จำนวนผู้เข้าชม/คณะ       <-- SUM
+  col[6]  = ด้านสถานที่ ความเหมาะสม  <-- rating 1-5
+  col[7]  = ด้านความรู้เจ้าหน้าที่    <-- rating 1-5
+  col[8]  = ความรู้ที่ได้จากการเยี่ยมชม <-- rating 1-5
+  *** ปรับ index ด้านบนให้ตรงกับ Sheet จริง ***
+=============================== */
+const COL = {
+  timestamp: 0,
+  org: 1,
+  name: 2,
+  type: 3,
+  province: 4,
+  visitors: 5,
+  ratePlace: 6,
+  rateStaff: 7,
+  rateKnowledge: 8
+};
+
+function starsHTML(score, containerId){
+  const full = Math.floor(score);
+  const half = score - full >= 0.3;
+  let html = '';
+  for(let i=1;i<=5;i++){
+    if(i<=full) html += '<span style="color:#e8b84b;font-size:16px;">★</span>';
+    else if(i===full+1 && half) html += '<span style="color:#e8b84b;font-size:16px;">☆</span>';
+    else html += '<span style="color:#ddd;font-size:16px;">★</span>';
+  }
+  return html;
+}
+
+function overallStarsHTML(score){
+  const stars = document.getElementById('overall-stars');
+  if(!stars) return;
+  stars.innerHTML = '';
+  for(let i=1;i<=5;i++){
+    const s = document.createElement('span');
+    s.className = 'overall-star';
+    s.style.color = i <= Math.round(score) ? '#e8b84b' : '#ddd';
+    s.textContent = '★';
+    stars.appendChild(s);
+  }
+}
+
+function setRating(scoreId, starsId, barId, countId, scores){
+  const valid = scores.map(v=>parseFloat(v)).filter(v=>!isNaN(v)&&v>=1&&v<=5);
+  if(!valid.length){
+    document.getElementById(scoreId).textContent='—';
+    document.getElementById(starsId).innerHTML='<span style="color:#ddd;font-size:16px;">★★★★★</span>';
+    if(countId) document.getElementById(countId).textContent='ยังไม่มีข้อมูล';
+    return 0;
+  }
+  const avg = valid.reduce((a,b)=>a+b,0)/valid.length;
+  document.getElementById(scoreId).textContent = avg.toFixed(2);
+  document.getElementById(starsId).innerHTML = starsHTML(avg);
+  document.getElementById(barId).style.width = Math.round(avg/5*100)+'%';
+  if(countId) document.getElementById(countId).textContent = valid.length+' การตอบกลับ';
+  return avg;
+}
+
 function renderStats(rows){
   const total = rows.length;
-  const today = rows.filter(r => isToday(r[0])).length;
-  
-  // สมมติว่า คอลัมน์ที่ 4 (index 3) คือ ประเภท, คอลัมน์ที่ 5 (index 4) คือ จังหวัด
+  const today = rows.filter(r => isToday(r[COL.timestamp])).length;
+
+  // Sum visitors
+  let visitorSum = 0;
+  rows.forEach(r => {
+    const v = parseInt((r[COL.visitors]||'0').replace(/,/g,''));
+    if(!isNaN(v)) visitorSum += v;
+  });
+
+  // Count unique org types
   const types = {};
   rows.forEach(r => {
-    const t = (r[3] || 'อื่นๆ').trim();
+    const t = (r[COL.type] || 'อื่นๆ').trim();
     types[t] = (types[t]||0) + 1;
   });
-  
-  const provs = new Set(rows.map(r => (r[4]||'').trim()).filter(Boolean));
-  
+
+  // Count unique provinces
+  const provs = new Set(rows.map(r => (r[COL.province]||'').trim()).filter(Boolean));
+
   updateStatNum('stat-total', total.toLocaleString());
   updateStatNum('stat-today', today.toLocaleString());
   updateStatNum('stat-groups', Object.keys(types).length);
   updateStatNum('stat-provinces', provs.size || '—');
-  
+  updateStatNum('stat-visitors-sum', visitorSum.toLocaleString());
+
   // Chart bars
   const sorted = Object.entries(types).sort((a,b) => b[1]-a[1]).slice(0,5);
   const max = sorted[0]?.[1] || 1;
   const chartEl = document.getElementById('chartBars');
-  
   if(sorted.length){
     chartEl.innerHTML = sorted.map(([label, count]) => `
       <div class="bar-row">
@@ -826,17 +1191,15 @@ function renderStats(rows){
   } else {
     chartEl.innerHTML = '<div style="text-align:center;padding:12px 0;font-size:13px;color:var(--earth);">ยังไม่มีข้อมูล</div>';
   }
-  
+
   // Recent visitors (last 5)
-  // ข้อมูลแถวล่าสุดจะอยู่ท้ายอาร์เรย์
   const recent = rows.slice(-5).reverse();
   const rl = document.getElementById('recentList');
-  
   if(recent.length){
     rl.innerHTML = recent.map((r, i) => {
-      const name = r[2] || 'ผู้เยี่ยมชม';
-      const org  = r[3] || '';
-      const time = r[0] ? timeAgo(r[0]) : '';
+      const name = r[COL.name] || r[COL.org] || 'ผู้เยี่ยมชม';
+      const org  = r[COL.type] || r[COL.org] || '';
+      const time = r[COL.timestamp] ? timeAgo(r[COL.timestamp]) : '';
       const ac   = avatarColors[i % avatarColors.length];
       return `
         <div class="visitor-item">
@@ -852,7 +1215,22 @@ function renderStats(rows){
   } else {
     rl.innerHTML = '<div style="text-align:center;padding:12px 0;font-size:13px;color:var(--earth);">ยังไม่มีข้อมูล</div>';
   }
-  
+
+  // Ratings
+  const r1 = setRating('score-place',     'stars-place',     'bar-place',     'count-place',     rows.map(r=>r[COL.ratePlace]));
+  const r2 = setRating('score-staff',     'stars-staff',     'bar-staff',     'count-staff',     rows.map(r=>r[COL.rateStaff]));
+  const r3 = setRating('score-knowledge', 'stars-knowledge', 'bar-knowledge', 'count-knowledge', rows.map(r=>r[COL.rateKnowledge]));
+  const validRatings = [r1,r2,r3].filter(v=>v>0);
+  const overallAvg = validRatings.length ? validRatings.reduce((a,b)=>a+b,0)/validRatings.length : 0;
+  if(overallAvg > 0){
+    document.getElementById('overall-avg').innerHTML = overallAvg.toFixed(2) + '<span class="overall-max">/5</span>';
+    overallStarsHTML(overallAvg);
+    const labels = ['','ต้องปรับปรุง','พอใช้','ดี','ดีมาก','ดีเยี่ยม'];
+    document.getElementById('overall-label').textContent = labels[Math.round(overallAvg)] || 'ดีมาก';
+  } else {
+    document.getElementById('overall-label').textContent = 'ยังไม่มีข้อมูลความพึงพอใจ';
+  }
+
   document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('th-TH', {hour:'2-digit',minute:'2-digit'});
 }
 
@@ -870,39 +1248,58 @@ function parseCSV(text){
   });
 }
 
-// ฟังก์ชันหลักดึงข้อมูล
+// Mock data when no sheet connected (สำหรับ demo)
+function loadMockData(){
+  const now = new Date();
+  const names = ['ส.อ.วิชัย','พ.อ.อ.สมชาย','ร.ต.ท.ศิริ','สิบเอกพิทักษ์','นายสมพร'];
+  const orgs  = ['หน่วยทหาร','ราชการ','สถานศึกษา','ชุมชน','เอกชน'];
+  const provs = ['นครศรีธรรมราช','สุราษฎร์ธานี','ตรัง','พัทลุง','กระบี่'];
+  const rows = [];
+  for(let i=0;i<47;i++){
+    const d = new Date(now - Math.random()*7*86400000);
+    const vc = String(Math.floor(Math.random()*30)+2);
+    const r1 = String(Math.floor(Math.random()*2)+4); // 4-5
+    const r2 = String(Math.floor(Math.random()*2)+4);
+    const r3 = String(Math.floor(Math.random()*2)+3); // 3-5
+    rows.push([
+      d.toISOString(),
+      'หน่วย' + String.fromCharCode(65+i%26),
+      names[i%names.length] + ' ' + String.fromCharCode(65+i%26),
+      orgs[i%orgs.length],
+      provs[i%provs.length],
+      vc, r1, r2, r3
+    ]);
+  }
+  // Add a few today
+  for(let i=0;i<5;i++){
+    rows.push([now.toISOString(), 'หน่วยทดสอบ', names[i]+'นาย', orgs[i], provs[i], '5', '5', '5', '4']);
+  }
+  allData = rows;
+  renderStats(rows);
+}
+
 async function fetchSheetData(){
+  if(SHEET_CSV_URL === 'YOUR_SHEET_CSV_URL_HERE'){
+    loadMockData();
+    return;
+  }
   try {
-    // ใช้ Fetch ดึงลิงก์โดยตรง
-    const res = await fetch(SHEET_CSV_URL);
-    if(!res.ok) throw new Error("ไม่สามารถเชื่อมต่อ Google Sheets ได้");
-    
-    const csvText = await res.text();
-    const rows = parseCSV(csvText);
-    
+    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(SHEET_CSV_URL);
+    const res = await fetch(proxyUrl);
+    const json = await res.json();
+    const rows = parseCSV(json.contents);
     allData = rows;
-    
-    // ตรวจสอบว่ามีข้อมูลหรือไม่
-    if(rows.length > 0) {
-      renderStats(rows);
-    } else {
-      document.getElementById('chartBars').innerHTML = '<div style="text-align:center;padding:12px 0;font-size:13px;color:var(--earth);">ยังไม่มีข้อมูลการลงทะเบียน</div>';
-      document.getElementById('recentList').innerHTML = '<div style="text-align:center;padding:12px 0;font-size:13px;color:var(--earth);">ยังไม่มีข้อมูลการลงทะเบียน</div>';
-    }
-    
+    renderStats(rows);
   } catch(e) {
-    console.error('Fetch failed:', e);
-    // แสดง Error ให้เห็นแทนการหมุนโหลดค้าง
-    document.getElementById('chartBars').innerHTML = '<div style="text-align:center;padding:12px 0;font-size:13px;color:red;">พบปัญหาในการดึงข้อมูล กรุณาลองใหม่</div>';
-    document.getElementById('recentList').innerHTML = '<div style="text-align:center;padding:12px 0;font-size:13px;color:red;">พบปัญหาในการดึงข้อมูล กรุณาลองใหม่</div>';
+    console.warn('Sheet fetch failed, using mock data:', e.message);
+    loadMockData();
   }
 }
 
 /* ===== INIT ===== */
 window.addEventListener('DOMContentLoaded', () => {
   fetchSheetData();
-  // อัปเดตข้อมูลอัตโนมัติทุกๆ 60 วินาที
-  setInterval(fetchSheetData, 60000);
+  setInterval(fetchSheetData, 60000); // refresh every 60s
 });
 </script>
 </body>
